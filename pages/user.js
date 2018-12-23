@@ -1,7 +1,9 @@
 import React from 'react'
 import Poll from '../containers/poll'
 import Grid from '@material-ui/core/Grid'
-import UserInfo from '../components/userInfo'
+import UserInfo from '../containers/userInfo'
+import LoadingPoll from '../components/poll/loading'
+import Fade from '@material-ui/core/Fade';
 
 import { SecuredContext } from '../containers/secured'
 
@@ -13,23 +15,23 @@ export const USER_POLLS = gql`
     userPolls(user:$user){
       _id
       question
-      options{ _id text desc }
+      options{ _id text desc votes users}
       date
       user
       image
+      voted
       privacy {
         poll
         results
       }
-      comments {
+      comments{
         _id
         text
-        user 
+        user
       }
     }
   }
 `
-
 
 class User extends React.Component {
 
@@ -40,20 +42,37 @@ class User extends React.Component {
   render() {
     const { userId } = this.props
     return (
+
       <SecuredContext.Consumer>
         {user => (
-          <Query query={USER_POLLS} variables={{ user: userId }}>
-            {({ loading, error, data }) => (
-              <Grid container direction='column' alignItems='center' spacing={40}>
-                <UserInfo email={userId || user._id} />
-                {data && data.userPolls && data.userPolls.map(poll =>
-                  <Grid item key={poll._id} lg={6} style={{ width: '100%' }} >
-                    <Poll poll={poll} />
-                  </Grid>
-                )}
+          <Fade in>
+            <Grid container direction='column' alignItems='center' >
+              <Grid item lg={6} sm={8} style={{ width: '100%', marginBottom: 40 }} >
+                <UserInfo user={user} _id={userId || user._id} />
               </Grid>
-            )}
-          </Query>
+              <Query query={USER_POLLS} variables={{ user: userId }}>
+                {({ loading, error, data }) => {
+                  if (loading) return <>
+                    <Grid item lg={6} style={{ width: '100%', marginBottom: 40 }}>
+                      <LoadingPoll />
+                    </Grid>
+                    <Grid item lg={6} style={{ width: '100%', marginBottom: 40 }}>
+                      <LoadingPoll />
+                    </Grid>
+                  </>
+
+                  if (!data || !data.userPolls || error) return <div>Error</div>
+                  return data.userPolls.map(poll =>
+                    <Grid item key={poll._id} lg={6} sm={8} style={{ width: '100%', marginBottom: 40 }} >
+
+                      <Poll poll={poll} />
+
+                    </Grid>
+                  )
+                }}
+              </Query>
+            </Grid>
+          </Fade>
         )}
       </SecuredContext.Consumer>
     )

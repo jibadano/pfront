@@ -1,11 +1,11 @@
 import React from 'react'
-
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography'
 import PropTypes from 'prop-types'
 import SendIcon from '@material-ui/icons/Send'
-import CloseIcon from '@material-ui/icons/Close'
 import SettingsIcon from '@material-ui/icons/Settings'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Switch from '@material-ui/core/Switch'
+import Tooltip from '@material-ui/core/Tooltip'
+import Grid from '@material-ui/core/Grid'
 
 import Button from '@material-ui/core/Button'
 import Collapse from '@material-ui/core/Collapse'
@@ -17,6 +17,7 @@ import classnames from 'classnames'
 const styles = theme => ({
 
   expand: {
+    float: 'left',
     transform: 'rotate(0deg)',
     transition: theme.transitions.create('transform', {
       duration: theme.transitions.duration.shortest,
@@ -25,6 +26,9 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       marginRight: -8,
     },
+  },
+  icon: {
+    marginLeft: 10
   },
   expandOpen: {
     transform: 'rotate(180deg)',
@@ -54,19 +58,49 @@ class Config extends React.Component {
 
     return <div>
       <Collapse in={expanded} timeout="auto" >
-        <Button variant="raised" color={!privacy.poll ? 'secondary' : null} onClick={this.tooglePrivacy}>Public poll</Button>
-        <Button variant="raised" color={!privacy.results ? 'secondary' : null} onClick={this.toogleResultsPrivacy}>Public results</Button>
+        <Grid container spacing={8} style={{ width: '100%', padding: 20 }} >
+          <Grid item xs={12} sm={6}>
+            <Tooltip title="Poll will be visible for anyone">
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={privacy.poll}
+                    onChange={this.tooglePrivacy}
+                    color="secondary"
+                  />
+                }
+                label="Public poll"
+              />
+            </Tooltip>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Tooltip title="Results will be visible">
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={privacy.results}
+                    onChange={this.toogleResultsPrivacy}
+                    color="secondary"
+                  />
+                }
+                label="Public results"
+              />
+            </Tooltip>
+          </Grid>
+        </Grid>
       </Collapse>
-      <CardActions disableActionSpacing>
-        <IconButton
-          className={classnames(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
+
+      <CardActions style={{ float: 'left', padding: 24 }}>
+        <Button
           onClick={() => this.setState({ expanded: !expanded })}
         >
-          <SettingsIcon />
-        </IconButton>
-        <IconButton onClick={() => onSave({ privacy })}><SendIcon /></IconButton>
+          Config<SettingsIcon className={classnames(classes.icon, classes.expand, {
+            [classes.expandOpen]: expanded,
+          })} />
+        </Button>
+      </CardActions>
+      <CardActions style={{ float: 'right', padding: 24 }}>
+        <Button variant="contained" color="primary" onClick={() => onSave({ privacy })}>Done<SendIcon className={classes.icon} /></Button>
       </CardActions>
 
     </div>

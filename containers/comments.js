@@ -10,6 +10,8 @@ const GET_COMMENTS = gql`
   query comments($_id:ID!, $page:Int) {
     comments(_id:$_id, page:$page){
       page 
+      size
+      hasMore
       list {
         user
         text
@@ -45,17 +47,17 @@ const Comments = ({ _id, first }) =>
     {({ data, error, loading, fetchMore }) => {
 
       const comments = get(data, 'comments.list') || []
-      const page = get(data, 'comments.page')
-
+      const page = get(data, 'comments.page') || 0
+      const hasMore = get(data, 'comments.hasMore')
+      
       return (
         <CommentsView
           comments={comments}
           loading={loading}
-          first={first}
+          hasMore={hasMore}
           onFetchMore={() => fetchMore({
             variables: { _id, page: page + 1 },
             updateQuery: (prev, { fetchMoreResult: more }) => {
-              console.log({prev, more});
               if (!more) return prev
               return more
             }

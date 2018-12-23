@@ -1,56 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import Select from 'react-select';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
-import CancelIcon from '@material-ui/icons/Cancel';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import Category from './poll/question/category'
-
-const suggestions = [
-  { label: 'Afghanistan' },
-  { label: 'Aland Islands' },
-  { label: 'Albania' },
-  { label: 'Algeria' },
-  { label: 'American Samoa' },
-  { label: 'Andorra' },
-  { label: 'Angola' },
-  { label: 'Anguilla' },
-  { label: 'Antarctica' },
-  { label: 'Antigua and Barbuda' },
-  { label: 'Argentina' },
-  { label: 'Armenia' },
-  { label: 'Aruba' },
-  { label: 'Australia' },
-  { label: 'Austria' },
-  { label: 'Azerbaijan' },
-  { label: 'Bahamas' },
-  { label: 'Bahrain' },
-  { label: 'Bangladesh' },
-  { label: 'Barbados' },
-  { label: 'Belarus' },
-  { label: 'Belgium' },
-  { label: 'Belize' },
-  { label: 'Benin' },
-  { label: 'Bermuda' },
-  { label: 'Bhutan' },
-  { label: 'Bolivia, Plurinational State of' },
-  { label: 'Bonaire, Sint Eustatius and Saba' },
-  { label: 'Bosnia and Herzegovina' },
-  { label: 'Botswana' },
-  { label: 'Bouvet Island' },
-  { label: 'Brazil' },
-  { label: 'British Indian Ocean Territory' },
-  { label: 'Brunei Darussalam' },
-].map(suggestion => ({
-  value: suggestion.label,
-  label: suggestion.label,
-}));
 
 const styles = theme => ({
   root: {
@@ -166,7 +123,7 @@ function ValueContainer(props) {
 
 function MultiValue(props) {
   return (
-    <Category name={props.children} /* onRemove={props.removeProps.onClick} */ />
+    <Category name={props.children} type={props.data.type} /* onRemove={props.removeProps.onClick} */ />
   )
 }
 
@@ -189,7 +146,11 @@ const components = {
 };
 
 class IntegrationReactSelect extends React.Component {
-  state = { multi: null }
+  constructor(props) {
+    super(props)
+    console.log({props});
+    this.state = { multi: props.initialValues }
+  }
 
   handleChange = name => value => {
     this.setState({
@@ -199,7 +160,6 @@ class IntegrationReactSelect extends React.Component {
 
   render() {
     const { classes, theme, onChange, onSubmit, suggestions } = this.props;
-
     const selectStyles = {
       input: base => ({
         ...base,
@@ -219,7 +179,7 @@ class IntegrationReactSelect extends React.Component {
           options={suggestions}
           components={components}
           value={this.state.multi}
-          onChange={value => { this.handleChange('multi')(value); onSubmit(value)}}
+          onChange={value => { this.handleChange('multi')(value); onSubmit(value) }}
           placeholder="Search polls"
           isMulti
         />
@@ -237,8 +197,8 @@ IntegrationReactSelect.propTypes = {
 };
 
 IntegrationReactSelect.defaultProps = {
-  onChange: () => {},
-  onSubmit: () => {},
+  onChange: () => { },
+  onSubmit: () => { },
   suggestions: []
 };
 

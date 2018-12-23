@@ -46,7 +46,7 @@ class Media extends React.Component {
               <div className={classes.container}>
                 <input className={classes.input} type="file" accept="image/*" id="raised-button-file" onChange={this.handleUpload.bind(this)} />
                 <label htmlFor="raised-button-file">
-                  <Button raised component="span" className={classes.button}>
+                  <Button component="span" className={classes.button}>
                     <FileUploadIcon />
                     Image
                   </Button>

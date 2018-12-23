@@ -4,12 +4,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckIcon from '@material-ui/icons/Check';
-
 import Error from '../../components/error'
 import { Mutation, Query } from 'react-apollo';
-
-import get from 'lodash/get'
-
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -17,20 +13,19 @@ import * as Yup from 'yup';
 const SIGNUP = gql`
   mutation signup($_id: ID!, $password: String!) {
     signup(_id: $_id, password: $password) {
-      user{_id}
       token
     }
   }
 `
 
-const VALIDATE_EMAIL = gql`
-  query validateEmail($_id: ID!) {
-    validateEmail(_id: $_id)
+const EXISTS = gql`
+  query exists($_id: ID) {
+    exists(_id: $_id)
   }
 `
 
 const Signup = ({ onSuccess, classes }) =>
-  <Query query={VALIDATE_EMAIL} >
+  <Query query={EXISTS} >
     {exists =>
       <div style={{ width: '100%' }}>
         <Mutation mutation={SIGNUP}>
@@ -38,13 +33,14 @@ const Signup = ({ onSuccess, classes }) =>
             if (data) onSuccess(data.signup)
             return (
               <Formik
+                validateOnChange
                 initialValues={{ _id: '', password: '', confirm: '' }}
                 validationSchema={Yup.object().shape({
-                  _id: Yup.string()
+                  _id: Yup.string().nullable()
                     .email('Enter a valid email')
                     .required('Required')
-                    .test('alreadyExists', 'Email already exists', async _id => exists.refetch({ _id }).then(({data}) => data.validateEmail)),
-                  password: Yup.string().required('Password is required'),
+                    .test('alreadyExists', 'Email already exists', async _id => _id ? exists.refetch({ _id }).then(({ data }) => !data.exists) : false),
+                  password: Yup.string().nullable().required('Password is required'),
                   confirm: Yup.mixed().test('confirm', 'Passwords does not match', function (confirm) {
                     return this.parent.password === confirm
                   }).required('Must confirm your password')
@@ -57,11 +53,11 @@ const Signup = ({ onSuccess, classes }) =>
                   errors,
                   handleChange,
                   handleBlur,
-                  handleSubmit
+                  handleSubmit,
+                  validateForm
                 }) =>
                   <form onSubmit={handleSubmit}>
                     {error && <Error graphQLErrors={error.graphQLErrors} />}
-
                     <TextField
                       id="_id"
                       label="Email"
@@ -69,7 +65,7 @@ const Signup = ({ onSuccess, classes }) =>
                       onChange={handleChange}
                       onBlur={handleBlur}
                       margin="dense"
-                      error={touched._id && errors._id}
+                      error={Boolean(touched._id && errors._id)}
                       helperText={touched._id && errors._id}
                       fullWidth
                       InputProps={{
@@ -85,7 +81,7 @@ const Signup = ({ onSuccess, classes }) =>
                       value={values.password}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      error={touched.password && errors.password}
+                      error={Boolean(touched.password && errors.password)}
                       helperText={touched.password && errors.password}
                       margin="dense"
                       fullWidth
@@ -97,11 +93,12 @@ const Signup = ({ onSuccess, classes }) =>
                       value={values.confirm}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      error={touched.confirm && errors.confirm}
+                      error={Boolean(touched.confirm && errors.confirm)}
                       helperText={touched.confirm && errors.confirm}
                       margin="dense"
                       fullWidth
                     />
+
                     <Button
                       disabled={loading}
                       type="submit"
@@ -110,7 +107,9 @@ const Signup = ({ onSuccess, classes }) =>
                       fullWidth
                       color="primary">
                       Sign up
-                     </Button>
+                    </Button>
+
+
                   </form>
                 }
               </Formik>

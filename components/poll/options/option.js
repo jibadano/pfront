@@ -3,29 +3,64 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import Fade from '@material-ui/core/Fade';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core/styles';
+import color1 from '@material-ui/core/colors/amber';
+import color2 from '@material-ui/core/colors/indigo';
+import color3 from '@material-ui/core/colors/blue';
+import color4 from '@material-ui/core/colors/green';
+import color5 from '@material-ui/core/colors/red';
+
 
 const styles = {
   content: { width: '100%', display: 'flex', zIndex: 1 },
-  text: { padding: 10, fontSize: 16 },
-  iconPercentage: { fontSize: 20, color: 'white', padding: '10px 20px', fontWeight: 'bold' },
-  icon: { fontSize: 30, padding: '5px 20px', fontWeight: 'bold', borderRight: '1px solid #ccc' }
+  text: { padding: '18px 10px 10px 10px', fontSize: 16 },
+  iconPercentage: {
+    fontSize: 36,
+    width: 60,
+    color: 'white',
+    fontWeight: 'bold'
+  },
+  icon: { textAlign: 'center', fontSize: 30, padding: '5px 20px', fontWeight: 'bold', borderRight: '1px solid #ccc' },
+  bar: { width: '100%', position: 'absolute', height: '50%', background: 'white' },
+  progressBar: { background: '#222' },
+  progress: { background: 'transparent' },
+  1: { background: color1[300] },
+  2: { background: color2[300] },
+  3: { background: color3[300] },
+  4: { background: color4[300] },
+  5: { background: color5[300] },
 }
 
-let OptionIcon = ({ classes, index, value }) => value || value == 0 ?
-  <Typography className={classes.iconPercentage} style={{ color: value === 0 ? '#222' : '#fff' }} variant="title">{value * 100}</Typography> :
-  <Typography className={classes.icon} variant="title">{index}</Typography>
+
+const OptionIcon = ({ classes, index, value }) => {
+  if (!(value || value == 0)) return <Typography className={classes.icon} variant="h6">{index}</Typography>
+  const val = Math.round(value * 10000) / 100
+  return (
+    <Fade in timeout={1000}>
+      <Typography
+        className={classes.iconPercentage}
+        style={{ color: value < .05 ? '#222' : '#fff', }}
+        variant="h6">
+        <div style={{ textAlign: 'center', position: 'absolute', marginLeft: val > 8 ? `calc(${val}}% - 60px)` : 20 }}>
+          {val}
+        </div>
+      </Typography>
+    </Fade>
+  )
+}
+
+
 
 
 const Option = ({ classes, value, edit, text, info, avatar, onChange, onRemove, onClick }) => (
   <ListItem dense style={{ padding: 0 }} button={!edit} onClick={onClick} >
-    <LinearProgress color="secondary" style={{ width: '100%', position: 'absolute', height: '100%', background: 'white' }} variant="determinate" value={value ? value * 100 : 0} />
+    <LinearProgress classes={{ barColorPrimary: classes[avatar], colorPrimary: classes.progress }} className={classes.bar} variant="determinate" value={value ? value * 100 : 0} />
 
     <div className={classes.content}>
-      <ListItemAvatar>
+      <ListItemAvatar >
         <OptionIcon classes={classes} index={avatar} value={value} />
       </ListItemAvatar>
       {edit ?
@@ -33,7 +68,7 @@ const Option = ({ classes, value, edit, text, info, avatar, onChange, onRemove, 
           value={text}
           onChange={event => onChange(event.target.value)}
           margin="normal"
-          style={{ width: '100%', marginTop: 0, padding: '0px 15px' }}
+          style={{ width: '100%', marginTop: 0, padding: '8px 15px 0 15px' }}
         /> : <ListItemText className={classes.text} primary={text} secondary={info} />
       }
     </div>

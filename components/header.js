@@ -18,7 +18,7 @@ const Header = ({ classes, children }) => (
   <AppBar position="fixed">
     <Toolbar >
       <Avatar className={classes.logo}>P</Avatar>
-      <Typography variant="title" color="inherit" >OLLO</Typography>
+      <Typography variant="h5" color="inherit" >OLLO</Typography>
       <div style={{ position: 'absolute', right: 0 }}>
         {children}
       </div>

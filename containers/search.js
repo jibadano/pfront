@@ -6,25 +6,32 @@ import gql from 'graphql-tag'
 
 const SEARCH = gql`
   query search($term:String) {
-    categories(term:$term) 
+    search(term:$term) {
+      value
+      label
+      type
+    }
   }
 `
 
-const Search = ({ onSearch }) =>
+const Search = ({onSearch, initialValues}) =>
   <Query query={SEARCH}>
-    {({ data: { categories }, loading, error, refetch }) =>
+    {({ data: { search }, loading, error, refetch }) =>
       <SearchView
-        suggestions={categories ? categories.map(category => ({ label: category, value: category })) : []}
-        onSubmit={values => values && values.length ? onSearch(values.map(category => category.value)) : onSearch()}
-        onChange={term => {refetch({ term })}}
+        onSubmit={onSearch}
+        initialValues={initialValues}
+        suggestions={search}
+        onChange={term => { refetch({ term }) }}
       />}
   </Query>
 
 Search.propTypes = {
-  onSearch: PropTypes.func
+  onSearch: PropTypes.func,
+  initialValues: PropTypes.array
 }
 
 Search.defaultProps = {
+  initialValues: null,
   onSearch: () => { }
 }
 

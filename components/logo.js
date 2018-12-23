@@ -26,8 +26,6 @@ const styles = theme => ({
   textBlack: {
     color: theme.palette.primary.main,
   }
-
-
 })
 
 const Logo = ({ classes, black, type, title, size }) => (

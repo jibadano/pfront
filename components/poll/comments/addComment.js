@@ -2,7 +2,7 @@ import React from 'react'
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SendIcon from '@material-ui/icons/Send';
 import TextField from '@material-ui/core/TextField';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -30,12 +30,12 @@ class AddComment extends React.Component {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton style={{ width: 20, height: 20 }} onClick={() => {
+                <Button style={{ width: 20, height: 20 }} onClick={() => {
                   onAddComment(comment)
                   this.setState({ comment: '' })
                 }} >
                   <SendIcon style={{ width: 20, height: 20 }} />
-                </IconButton>
+                </Button>
               </InputAdornment>
             )
           }}

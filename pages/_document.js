@@ -5,6 +5,7 @@ import flush from 'styled-jsx/server';
 import getPageContext from '../lib/material/getPageContext';
 
 class MyDocument extends Document {
+
   render() {
     const { pageContext } = this.props;
 
@@ -28,7 +29,7 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
           />
         </Head>
-        <body>
+        <body >
           <Main />
           <NextScript />
         </body>

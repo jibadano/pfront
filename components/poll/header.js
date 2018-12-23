@@ -12,12 +12,12 @@ const styles = theme => ({
   }
 })
 
-let Header = ({ username, date, classes }) => (
+let Header = ({ username, avatar, date, classes }) => (
   <PollContext.Consumer>
     {edit => (
       <CardHeader
         avatar={
-          <Avatar className={classes.avatar} >
+          <Avatar className={classes.avatar} src={avatar} >
             {username.slice(0, 1).toUpperCase()}
           </Avatar>
         }
@@ -41,6 +41,7 @@ Header.defaultProps = {
 
 Header.propTypes = {
   username: PropTypes.string.isRequired,
+  avatar: PropTypes.string,
   edit: PropTypes.bool,
   date: PropTypes.object
 }
