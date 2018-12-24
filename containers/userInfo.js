@@ -12,6 +12,7 @@ const USER = gql`
       avatar
       firstName
       lastName
+      contrast
     }
   }
 `
@@ -25,6 +26,7 @@ const UserInfo = ({ _id, user }) =>
         lastName={get(data, 'user.lastName')}
         avatar={get(data, 'user.avatar')}
         onLogout={user.logout}
+        contrast={get(data, 'user.contrast')}
       />}
   </Query>
 

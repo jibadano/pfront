@@ -14,19 +14,17 @@ class AddComment extends React.Component {
     let { onAddComment, loading } = this.props
     const { comment } = this.state
 
-    if (loading) return <LinearProgress />
-
     return (
-      <div style={{ display: 'flex' }}>
+      <div >
         <TextField
           label={comment ? 'But please, try not to be offensive' : 'Add a comment'}
           multiline
           rowsMax="2"
-          disabled={false}
+          disabled={loading}
           value={comment}
           onChange={event => this.setState({ comment: event.target.value })}
           margin="normal"
-          style={{ width: '100%' }}
+          style={{ width: '100%', marginBottom: 0 }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -40,6 +38,7 @@ class AddComment extends React.Component {
             )
           }}
         />
+        {loading && <LinearProgress style={{ height: 2 }} />}
       </div>)
   }
 }

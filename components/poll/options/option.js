@@ -18,13 +18,13 @@ const styles = {
   content: { width: '100%', display: 'flex', zIndex: 1 },
   text: { padding: '18px 10px 10px 10px', fontSize: 16 },
   iconPercentage: {
-    fontSize: 36,
-    width: 60,
-    color: 'white',
-    fontWeight: 'bold'
+    position: 'relative',
+    fontSize: 12,
+    width: 12,
+    top: 18
   },
   icon: { textAlign: 'center', fontSize: 30, padding: '5px 20px', fontWeight: 'bold', borderRight: '1px solid #ccc' },
-  bar: { width: '100%', position: 'absolute', height: '50%', background: 'white' },
+  bar: {  width: '100%', position: 'absolute', bottom: 0, background: 'white' },
   progressBar: { background: '#222' },
   progress: { background: 'transparent' },
   1: { background: color1[300] },
@@ -35,30 +35,21 @@ const styles = {
 }
 
 
-const OptionIcon = ({ classes, index, value }) => {
-  if (!(value || value == 0)) return <Typography className={classes.icon} variant="h6">{index}</Typography>
-  const val = Math.round(value * 10000) / 100
-  return (
-    <Fade in timeout={1000}>
-      <Typography
-        className={classes.iconPercentage}
-        style={{ color: value < .05 ? '#222' : '#fff', }}
-        variant="h6">
-        <div style={{ textAlign: 'center', position: 'absolute', marginLeft: val > 8 ? `calc(${val}}% - 60px)` : 20 }}>
-          {val}
-        </div>
-      </Typography>
-    </Fade>
-  )
-}
-
-
-
+const OptionIcon = ({ classes, index, value }) => <Typography className={classes.icon} variant="h6">{index}</Typography>
 
 const Option = ({ classes, value, edit, text, info, avatar, onChange, onRemove, onClick }) => (
   <ListItem dense style={{ padding: 0 }} button={!edit} onClick={onClick} >
     <LinearProgress classes={{ barColorPrimary: classes[avatar], colorPrimary: classes.progress }} className={classes.bar} variant="determinate" value={value ? value * 100 : 0} />
 
+
+    <Fade in={value || value == 0} timeout={1000}>
+      <Typography
+        className={classes.iconPercentage}
+        style={{ left: `calc(${Math.round(value * 100)}% - 30px)` }}
+        variant="body1">
+        {Math.round(value * 10000) / 100}%
+      </Typography>
+    </Fade>
     <div className={classes.content}>
       <ListItemAvatar >
         <OptionIcon classes={classes} index={avatar} value={value} />
@@ -72,6 +63,7 @@ const Option = ({ classes, value, edit, text, info, avatar, onChange, onRemove, 
         /> : <ListItemText className={classes.text} primary={text} secondary={info} />
       }
     </div>
+
   </ListItem>
 )
 

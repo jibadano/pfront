@@ -7,8 +7,8 @@ import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
 export const EXPLORE = gql`
-  query explore($categories:[String], $users:[ID]) {
-    explore(categories:$categories, users:$users) {
+  query polls($categories:[String], $users:[ID]) {
+    polls(categories:$categories, users:$users) {
       _id
       question
       options{ _id text desc votes users}
@@ -49,7 +49,7 @@ class Explore extends React.Component {
                 <LoadingPoll />
               </Grid>
             </>}
-            {data && data.explore && data.explore.map(poll => (
+            {data && data.polls && data.polls.map(poll => (
               <Grid item key={poll._id} lg={6} style={{ width: '100%', marginBottom: 40 }}>
                 <Poll poll={poll} />
               </Grid>

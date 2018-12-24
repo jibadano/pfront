@@ -6,8 +6,8 @@ import gql from 'graphql-tag'
 import LoadingPoll from '../components/poll/loading'
 
 export const POLLS = gql`
-  query polls($categories:[String]) {
-    polls(categories:$categories) {
+  query polls($categories:[String], $users:[ID]) {
+    polls(categories:$categories, users:$users) {
       _id
       question
       options{ _id text desc votes users}
@@ -35,9 +35,9 @@ class Index extends React.PureComponent {
   }
 
   render() {
-    const { categories } = this.props
+    const { categories, users } = this.props
     return (
-      <Query query={POLLS} variables={{ categories }}>
+      <Query query={POLLS} variables={{ categories, users }}>
         {({ loading, error, data, refetch }) =>
           <Grid container direction='column' alignItems='center'>
             {loading && <>

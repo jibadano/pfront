@@ -11,8 +11,8 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 
 export const USER_POLLS = gql`
-  query userPolls($user:ID) {
-    userPolls(user:$user){
+  query polls($users:[ID],$categories:[String]) {
+    polls(users:$users, categories:$categories){
       _id
       question
       options{ _id text desc votes users}
@@ -35,22 +35,22 @@ export const USER_POLLS = gql`
 
 class User extends React.Component {
 
+
   static getInitialProps({ query }) {
-    return { userId: query.id }
+    return { userId: query.id, categories: query.categories ? query.categories.split(',') : null, users: query.users ? query.users.split(',') : null }
   }
 
   render() {
-    const { userId } = this.props
+    const { userId, categories, users } = this.props
     return (
-
       <SecuredContext.Consumer>
         {user => (
           <Fade in>
             <Grid container direction='column' alignItems='center' >
               <Grid item lg={6} sm={8} style={{ width: '100%', marginBottom: 40 }} >
-                <UserInfo user={user} _id={userId || user._id} />
+                <UserInfo user={user} _id={users && users.length ? users[0] : user._id} />
               </Grid>
-              <Query query={USER_POLLS} variables={{ user: userId }}>
+              <Query query={USER_POLLS} variables={{ users: users || [user._id], categories }}>
                 {({ loading, error, data }) => {
                   if (loading) return <>
                     <Grid item lg={6} style={{ width: '100%', marginBottom: 40 }}>
@@ -61,8 +61,8 @@ class User extends React.Component {
                     </Grid>
                   </>
 
-                  if (!data || !data.userPolls || error) return <div>Error</div>
-                  return data.userPolls.map(poll =>
+                  if (!data || !data.polls || error) return <div>Error</div>
+                  return data.polls.map(poll =>
                     <Grid item key={poll._id} lg={6} sm={8} style={{ width: '100%', marginBottom: 40 }} >
 
                       <Poll poll={poll} />
