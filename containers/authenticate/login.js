@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
 import React from 'react'
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
 import get from 'lodash/get'
 import Error from '../../components/error'
-import { Mutation } from 'react-apollo';
+import { Mutation } from 'react-apollo'
 
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+import { Formik } from 'formik'
+import * as Yup from 'yup'
 
 const LOGIN = gql`
   mutation login($_id: ID!, $password: String!) {
