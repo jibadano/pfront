@@ -21,6 +21,9 @@ class MyApp extends App {
 						body {
 							margin: 0;
 						}
+						.styles_wrapper__3KXDn {
+							width: 100%;
+						}
 					`}
 				</style>
 			</Container>

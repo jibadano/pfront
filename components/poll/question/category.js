@@ -10,30 +10,30 @@ const styles = theme => ({
 		width: 'auto',
 		padding: '0 10px 0 8px',
 		marginRight: 5,
-		marginTop: 5,
+		marginTop: 5
 	},
 	text: {
 		fontSize: 14,
 		fontWeight: 500,
 		color: 'white',
-		fontStyle: 'italic',
+		fontStyle: 'italic'
 	},
 	avatar: {
 		color: 'white',
 		marginRight: 2,
 		fontSize: 16,
-		fontWeight: 'bold',
+		fontWeight: 'bold'
 	},
 	removeIcon: {
 		width: 15,
 		height: 15,
 		color: 'white',
-		fontSize: 15,
-	},
+		fontSize: 15
+	}
 })
 
-const Category = ({ classes, name, onRemove, type }) => (
-	<div className={classes.category}>
+const Category = ({ classes, name, onRemove, type, onClick }) => (
+	<div className={classes.category} onClick={onClick}>
 		{type === 'USER' ? (
 			<Typography className={classes.avatar} style={{ fontSize: 10, padding: '4px 3px 0 0' }}>
 				User
@@ -53,11 +53,13 @@ const Category = ({ classes, name, onRemove, type }) => (
 Category.propTypes = {
 	name: PropTypes.string,
 	onRemove: PropTypes.func,
+	onClick: PropTypes.func
 }
 
 Category.defaultProps = {
 	name: '',
 	onRemove: null,
+	onClick: () => {}
 }
 
 export default withStyles(styles)(Category)

@@ -37,7 +37,7 @@ const Logo = ({ classes, black, type, title, size }) => (
 		<Typography
 			style={{ fontSize: size / 2 }}
 			className={classnames(classes.text, { [classes.textBlack]: black })}
-			variant="title"
+			variant="h6"
 		>
 			{title && 'Polls'}
 		</Typography>

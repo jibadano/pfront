@@ -27,6 +27,9 @@ const styles = theme => ({
 		height: 200,
 		margin: 'auto',
 		fontSize: 120
+	},
+	actions: {
+		background: theme.palette.primary.main
 	}
 })
 
@@ -37,9 +40,24 @@ class UserInfo extends React.Component {
 	}
 
 	render() {
-		const { email, firstName, lastName, avatar, onLogout, classes, contrast, width } = this.props
+		const { email, firstName, lastName, avatar, onLogout, classes, contrast } = this.props
 		return (
 			<Card className={classes.card}>
+				<CardActions className={classes.actions}>
+					<Button variant="contained" color="primary">
+						Hand shake
+					</Button>
+					<Button variant="contained" color="primary">
+						Report
+					</Button>
+					<Button variant="contained" color="primary">
+						Edit profile
+					</Button>
+					<Button variant="contained" color="primary" onClick={onLogout}>
+						Log out
+						<LogOutIcon style={{ marginLeft: 10 }} />
+					</Button>
+				</CardActions>
 				<CardContent>
 					<Grid container direction="row-reverse" justify="center" spacing={40}>
 						<Grid item sm={4} xs={12}>
@@ -50,7 +68,7 @@ class UserInfo extends React.Component {
 						<Grid item sm={8} xs={8}>
 							<Grid container justify="center" spacing={16}>
 								<Grid item xs={12}>
-									<Typography variant="h5" align="center">
+									<Typography variant="h6" align="center">
 										{firstName} {lastName}
 										<Typography variant="caption" color="textSecondary">
 											{email}
@@ -61,13 +79,13 @@ class UserInfo extends React.Component {
 								{contrast && (
 									<>
 										<Grid item xs={12} style={{ display: 'flex' }}>
-											<Typography style={{ width: '33.33%' }} variant="title" align="center" color="textSecondary">
+											<Typography style={{ width: '33.33%' }} variant="h6" align="center" color="textSecondary">
 												{contrast.polls} polls
 											</Typography>
-											<Typography style={{ width: '33.33%' }} variant="title" align="center" color="textSecondary">
+											<Typography style={{ width: '33.33%' }} variant="h6" align="center" color="textSecondary">
 												{contrast.voted} votes
 											</Typography>
-											<Typography style={{ width: '33.33%' }} variant="title" align="center" color="textSecondary">
+											<Typography style={{ width: '33.33%' }} variant="h6" align="center" color="textSecondary">
 												100 votes
 											</Typography>
 										</Grid>
@@ -82,16 +100,6 @@ class UserInfo extends React.Component {
 						</Grid>
 					</Grid>
 				</CardContent>
-				<CardActions>
-					<IconButton onClick={onLogout}>
-						<LogOutIcon />
-					</IconButton>
-					<Button onClick={onLogout}>
-						{' '}
-						{isWidthUp('xs', width)}
-						{width}Send a message
-					</Button>
-				</CardActions>
 			</Card>
 		)
 	}
