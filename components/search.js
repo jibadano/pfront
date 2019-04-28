@@ -93,7 +93,7 @@ function Option(props) {
 			}}
 			{...props.innerProps}
 		>
-			{props.children}
+			<Category name={props.children} type={props.data.type} />
 		</MenuItem>
 	)
 }
@@ -169,7 +169,7 @@ class IntegrationReactSelect extends React.Component {
 						this.handleChange('multi')(value)
 						onSubmit(value)
 					}}
-					placeholder="Search polls"
+					placeholder="Search categories or users"
 					isMulti
 				/>
 			</div>

@@ -7,7 +7,7 @@ import Header from './header'
 import NewPoll from '../containers/newPoll'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
-import Button from '@material-ui/core/Button'
+import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
 import RemoveIcon from '@material-ui/icons/Remove'
 import UserIcon from '@material-ui/icons/Person'
@@ -26,7 +26,8 @@ const styles = {
 		padding: '10px 20px'
 	},
 	menuItem: {
-		marginRight: 10
+		marginRight: 10,
+		marginLeft: 5
 	},
 	avatar: {
 		width: 30,
@@ -66,7 +67,6 @@ class Layout extends React.Component {
 	render() {
 		const { children, classes, categories, users } = this.props
 		const { showNewPoll } = this.state
-		console.log({ categories })
 		return (
 			<SecuredContext.Consumer>
 				{user => (
@@ -94,15 +94,14 @@ class Layout extends React.Component {
 						<div style={{ paddingTop: '80px' }}>
 							<Grid container direction="column" alignItems="center" style={{ marginBottom: 20 }}>
 								<Grid item lg={6} className={classes.menu} style={{ padding: 0 }}>
-									<Button
-										variant="fab"
-										mini
+									<Fab
+										size="small"
 										className={classes.menuItem}
 										color="secondary"
 										onClick={() => this.setState({ showNewPoll: !showNewPoll })}
 									>
 										{showNewPoll ? <RemoveIcon /> : <AddIcon />}
-									</Button>
+									</Fab>
 									<Search initialValues={this.searchValues(categories, users)} onSearch={this.onSearch} />
 								</Grid>
 								<Grid style={{ width: '100%', padding: 0 }} item lg={6}>

@@ -42,11 +42,12 @@ export const USER_POLLS = gql`
 
 class User extends React.Component {
 	static getInitialProps({ query }) {
-		return {
-			userId: query.id,
-			categories: query.categories ? query.categories.split(',') : null,
-			users: query.users ? query.users.split(',') : null
-		}
+		const props = { userId: query.id }
+
+		if (query.categories) props.categories = query.categories.split(',')
+		if (query.users) props.users = query.users.split(',')
+
+		return props
 	}
 
 	render() {

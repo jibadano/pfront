@@ -5,7 +5,8 @@ import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import classnames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
-
+import InputAdornment from '@material-ui/core/InputAdornment'
+import CloseIcon from '@material-ui/icons/Close'
 import ParticleEffectButton from 'react-particle-effect-button'
 
 const styles = theme => ({
@@ -37,44 +38,54 @@ const OptionIcon = ({ index, value, classes }) => (
 
 const isVoted = value => Boolean(value || value == 0)
 
-const Option = ({ classes, value, edit, text, info, avatar, onChange, onRemove, onClick, selected }) => (
-	<>
-		<div style={{ width: '100%' }}>
+const Option = ({ classes, index, value, edit, text, info, avatar, onChange, onClick, selected }) => (
+	<div style={{ width: '100%' }}>
+		{!edit && !isVoted(value) && (
 			<ParticleEffectButton hidden={isVoted(value)} className={classes.particles}>
-				<ListItem dense style={{ padding: 0, background: 'white' }} button={!edit && !isVoted(value)} onClick={onClick}>
+				<ListItem dense style={{ padding: 0, background: 'white' }} button onClick={onClick}>
 					<div className={classes.content}>
 						<ListItemAvatar>
 							<OptionIcon classes={classes} index={avatar} value={value} />
 						</ListItemAvatar>
-						{edit ? (
-							<TextField
-								value={text}
-								onChange={event => onChange(event.target.value)}
-								margin="normal"
-								style={{ width: '100%', marginTop: 0, padding: '8px 15px 0 15px' }}
-							/>
-						) : (
-							<ListItemText className={classes.text} primary={text} secondary={info} />
-						)}
+
+						<ListItemText className={classes.text} primary={text} secondary={info} />
 					</div>
 				</ListItem>
 			</ParticleEffectButton>
-		</div>
-		<ListItem dense style={{ padding: 0 }}>
-			<div className={classes.content}>
-				<div
-					style={{
-						width: `${Math.round(value * 100)}%`
-					}}
-					className={classnames(classes.progress, { [classes.selected]: selected })}
-				/>
-				<ListItemAvatar>
-					<OptionIcon classes={classes} index={avatar} value={value} />
-				</ListItemAvatar>
-				<ListItemText className={classes.text} primary={text} secondary={info} />
-			</div>
-		</ListItem>
-	</>
+		)}
+		{isVoted(value) && (
+			<ListItem dense style={{ padding: 0 }}>
+				<div className={classes.content}>
+					<div
+						style={{
+							width: `${Math.round(value * 100)}%`
+						}}
+						className={classnames(classes.progress, { [classes.selected]: selected })}
+					/>
+					<ListItemAvatar>
+						<OptionIcon classes={classes} index={avatar} value={value} />
+					</ListItemAvatar>
+					<ListItemText className={classes.text} primary={text} secondary={info} />
+				</div>
+			</ListItem>
+		)}
+		{!isVoted(value) && edit && (
+			<ListItem dense style={{ padding: 0, background: 'white' }} onClick={onClick}>
+				<div className={classes.content}>
+					<ListItemAvatar>
+						<OptionIcon classes={classes} index={avatar} value={value} />
+					</ListItemAvatar>
+
+					<TextField
+						value={text}
+						onChange={event => onChange(event.target.value)}
+						margin="normal"
+						style={{ width: '100%', marginTop: 0, padding: '8px 15px 0 15px' }}
+					/>
+				</div>
+			</ListItem>
+		)}
+	</div>
 )
 
 export default withStyles(styles)(Option)

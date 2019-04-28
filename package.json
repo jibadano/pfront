@@ -23,6 +23,7 @@
 		"next": "^6.1.2",
 		"react": "^16.4.0",
 		"react-apollo": "2.1.0",
+		"react-bottom-scroll-listener": "^2.1.2",
 		"react-dom": "^16.4.0",
 		"react-jss": "^8.4.0",
 		"react-particle-effect-button": "^1.0.1",

@@ -1,8 +1,5 @@
 import PropTypes from 'prop-types'
 import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import Avatar from '@material-ui/core/Avatar'
 import Option from './option'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
@@ -15,9 +12,8 @@ const SortableList = SortableContainer(({ options, onChange, onRemove, edit }) =
 		<div>
 			{options &&
 				options.map((option, index) => (
-					<div style={{ display: 'flex' }}>
+					<div key={option._id || index} style={{ display: 'flex' }}>
 						<SortableOption
-							key={option._id}
 							index={index}
 							avatar={index + 1}
 							text={option.text}
@@ -25,12 +21,10 @@ const SortableList = SortableContainer(({ options, onChange, onRemove, edit }) =
 							onRemove={onRemove}
 							edit
 						/>
-						<IconButton
-							style={{ width: 20, height: 20, position: 'absolute', right: 15, zIndex: 1 }}
+						<CloseIcon
 							onClick={() => onRemove(index)}
-						>
-							<CloseIcon style={{ width: 20, height: 20 }} />
-						</IconButton>
+							style={{ width: 20, height: 20, cursor: 'pointer', position: 'absolute', right: 15, zIndex: 1 }}
+						/>
 					</div>
 				))}
 		</div>
